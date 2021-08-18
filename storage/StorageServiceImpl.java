@@ -50,17 +50,31 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     @Override
-    public Integer saveBooking(Booking booking) {
+    public Booking saveBooking(Booking booking) {
         Integer primaryKey = 100 + (int) (Math.random() * 200);
         booking.setId(primaryKey);
         bookingMap.put(primaryKey, booking);
 
-        return primaryKey;
+        return booking;
     }
 
     @Override
     public Station findStation(String name) {
         Station result = stationMap.get(name);
         return result;
+    }
+
+    @Override
+    public List<Taxi> getAllTaxis() {
+        List<Taxi> allTaxies = new ArrayList<>();
+        taxiMap.forEach((index, taxi) -> {
+            allTaxies.add(taxi);
+        });
+        return allTaxies;
+    }
+
+    @Override
+    public void updateTaxi(Taxi taxi) {
+        taxiMap.put(taxi.getId(), taxi);
     }
 }

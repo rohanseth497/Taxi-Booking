@@ -10,7 +10,10 @@ public interface IStorageService {
     Integer saveTaxi(Taxi taxi);
     List<Integer> saveAllTaxi(List<Taxi> taxies);
     Integer saveStation(Station station);
-    Integer saveBooking(Booking booking);
+    Booking saveBooking(Booking booking);
 
     Station findStation(String name);
+    List<Taxi> getAllTaxis();
+
+    void updateTaxi(Taxi taxi);
 }

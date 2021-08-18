@@ -1,16 +1,16 @@
 package booking.model;
 
-import java.sql.Date;
-import taxi.model.Taxi;
+import java.util.Date;
+
+import station.model.Station;
 
 public class Booking {
     private int Id;
     private Date pickupTime;
     private Boolean isBookingCompleted;
     private Date endTime;
-    private Taxi taxi;
-    private String source;
-    private String destination;
+    private Station source;
+    private Station destination;
 
     public int getId() {
         return this.Id;
@@ -48,27 +48,22 @@ public class Booking {
         this.endTime = endTime;
     }
 
-    public Taxi getTaxi() {
-        return this.taxi;
-    }
 
-    public void setTaxi(Taxi taxi) {
-        this.taxi = taxi;
-    }
-
-    public String getSource() {
+    public Station getSource() {
         return this.source;
     }
 
-    public void setSource(String source) {
+    public void setSource(Station source) {
         this.source = source;
     }
 
-    public String getDestination() {
+    public Station getDestination() {
         return this.destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(Station destination) {
         this.destination = destination;
     }
+
+
 }

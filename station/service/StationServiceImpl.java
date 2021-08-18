@@ -22,13 +22,15 @@ public class StationServiceImpl implements IStationService {
     }
 
     @Override
-    public void saveStation(String name, int distanceFromSource, int timeTakenFromSource) {
+    public Station saveStation(String name, int distanceFromSource, int timeTakenFromSource) {
         Station station = new Station();
         station.setName(name);
         station.setDistanceFromSource(distanceFromSource);
         station.setTimeTakenFromSource(timeTakenFromSource);
 
         storageService.saveStation(station);
+
+        return station;
     }
 
     @Override
