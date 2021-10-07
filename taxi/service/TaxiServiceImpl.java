@@ -91,5 +91,10 @@ public class TaxiServiceImpl implements ITaxiService {
     public void updateTaxi(Taxi taxi) {
         storageService.updateTaxi(taxi);
     }
+
+    @Override
+    public Taxi findTaxi(int id) {
+        return storageService.findTaxi(id);
+    }
     
 }

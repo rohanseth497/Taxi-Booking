@@ -9,4 +9,5 @@ public interface ITaxiService {
     Taxi saveTaxi(String taxiNumber, String standByStation);
     void updateTaxi(Taxi taxi);
     Taxi findTaxiCloseToStation(Station station, Date pickupTime);
+    Taxi findTaxi(int id);
 }

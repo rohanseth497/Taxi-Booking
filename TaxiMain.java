@@ -20,19 +20,31 @@ public class TaxiMain {
 
         ITaxiService taxiService = TaxiServiceImpl.getInstance();
         taxiService.saveTaxi("1", "A");
-        taxiService.saveTaxi("2", "B");
-        taxiService.saveTaxi("3", "C");
+        // taxiService.saveTaxi("2", "B");
+        // taxiService.saveTaxi("3", "C");
         // taxiService.saveTaxi("4", "D");
         // taxiService.saveTaxi("5", "E");
 
         IBookingService bookingService = BookingServiceImpl.getInstance();
         
-        bookingService.book("A", "B", new Date(2021, 8, 18, 11, 0));
-        bookingService.book("A", "C", new Date(2021, 8, 18, 11, 0));
-        bookingService.book("B", "C", new Date(2021, 8, 18, 11, 0));
-        bookingService.book("C", "A", new Date(2021, 8, 18, 14, 0));
-        bookingService.book("A", "C", new Date(2021, 8, 18, 11, 0));
-        bookingService.book("C", "A", new Date(2021, 8, 18, 15, 0));
+        Runnable one = () -> { 
+            boolean isBookingDone = bookingService.book("A", "B", new Date(2021, 8, 18, 11, 0));
+            System.out.println(isBookingDone);
+        };
+        Runnable two = () -> { 
+            boolean isBookingDone = bookingService.book("A", "B", new Date(2021, 8, 18, 11, 0));
+            System.out.println(isBookingDone);
+        };
+
+        Thread t1 = new Thread(one);
+        Thread t2 = new Thread(two);
+
+        t1.start();
+        t2.start();
+        // bookingService.book("B", "C", new Date(2021, 8, 18, 11, 0));
+        // bookingService.book("C", "A", new Date(2021, 8, 18, 14, 0));
+        // bookingService.book("A", "C", new Date(2021, 8, 18, 11, 0));
+        // bookingService.book("C", "A", new Date(2021, 8, 18, 15, 0));
 
     }
 }

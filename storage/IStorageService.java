@@ -14,6 +14,8 @@ public interface IStorageService {
 
     Station findStation(String name);
     List<Taxi> getAllTaxis();
+    Booking findBooking(int bookingId);
+    Taxi findTaxi(int id);
 
     void updateTaxi(Taxi taxi);
 }

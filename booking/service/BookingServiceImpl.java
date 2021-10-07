@@ -32,7 +32,7 @@ public class BookingServiceImpl implements IBookingService {
         taxiService = TaxiServiceImpl.getInstance();
         stationService = StationServiceImpl.getInstance();
     }
-    
+
     @Override
     public Boolean book(String source, String destination, Date pickupTime) {
         Boolean bookingDone = Boolean.FALSE;
@@ -43,32 +43,54 @@ public class BookingServiceImpl implements IBookingService {
             // Lock the taxi for other bookings
             Taxi taxi = taxiService.findTaxiCloseToStation(sourceStation, pickupTime);
 
-            if (taxi == null) return false;
+            if (taxi == null)
+                return false;
 
-            // Create a booking object and add it to db as well as taxi's booking list
-            Booking booking = new Booking();
-            booking.setSource(sourceStation);
-            booking.setDestination(destinationStation);
-            booking.setPickupTime(pickupTime);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(pickupTime);
-            calendar.add(Calendar.MINUTE,
-                Math.abs(destinationStation.getTimeTakenFromSource() - sourceStation.getTimeTakenFromSource()));
-            booking.setEndTime(calendar.getTime());
-
-            // saving the booking
-            storageService.saveBooking(booking);
-
-            // saving the bookings of taxi
-            taxi.getBookings().add(booking);
+            boolean isTaxiAvailable = taxi.tryLock();
             taxiService.updateTaxi(taxi);
 
-            bookingDone = Boolean.TRUE;
+            if (isTaxiAvailable) {
+                // Create a booking object and add it to db as well as taxi's booking list
+                Booking booking = new Booking();
+                booking.setSource(sourceStation);
+                booking.setDestination(destinationStation);
+                booking.setPickupTime(pickupTime);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(pickupTime);
+                calendar.add(Calendar.MINUTE,
+                        Math.abs(destinationStation.getTimeTakenFromSource() - sourceStation.getTimeTakenFromSource()));
+                booking.setEndTime(calendar.getTime());
+
+                // saving the booking
+                storageService.saveBooking(booking);
+
+                // saving the bookings of taxi
+                taxi.getBookings().add(booking);
+                
+                taxi.unlock();
+                taxiService.updateTaxi(taxi);
+
+                bookingDone = Boolean.TRUE;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return bookingDone;
     }
-    
+
+    @Override
+    public void completeBooking(int bookingId, int taxiId) {
+        Booking booking = storageService.findBooking(bookingId);
+        booking.setIsBookingCompleted(true);
+
+        // calculate earning
+
+        Taxi taxi = taxiService.findTaxi(taxiId);
+
+        taxi.setStandByStation(booking.getDestination());
+
+        taxiService.updateTaxi(taxi);
+    }
+
 }

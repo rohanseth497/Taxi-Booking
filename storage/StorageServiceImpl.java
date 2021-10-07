@@ -77,4 +77,14 @@ public class StorageServiceImpl implements IStorageService {
     public void updateTaxi(Taxi taxi) {
         taxiMap.put(taxi.getId(), taxi);
     }
+
+    @Override
+    public Booking findBooking(int bookingId) {
+       return bookingMap.get(bookingId);
+    }
+
+    @Override
+    public Taxi findTaxi(int id) {
+        return taxiMap.get(id);
+    }
 }

@@ -1,6 +1,8 @@
 package taxi.model;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.ArrayList;
 
 import booking.model.Booking;
@@ -10,6 +12,8 @@ public class Taxi {
     private String taxiNumber;
     private List<Booking> bookings = new ArrayList<>();
     private Station standByStation;
+
+    private Lock lock = new ReentrantLock();
 
     public int getId() {
         return this.Id;
@@ -43,4 +47,11 @@ public class Taxi {
         this.standByStation = standByStation;
     }
 
+    public boolean tryLock() {
+        return lock.tryLock();
+    }
+
+    public void unlock() {
+        lock.unlock();
+    }
 }
